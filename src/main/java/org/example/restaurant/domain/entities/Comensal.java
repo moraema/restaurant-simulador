@@ -2,7 +2,7 @@ package org.example.restaurant.domain.entities;
 
 import org.example.restaurant.domain.logic.Recepcionista;
 
-import javax.swing.text.html.parser.Entity;
+import com.almasb.fxgl.entity.Entity;
 
 public class Comensal {
     private final int id;

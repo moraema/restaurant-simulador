@@ -1,7 +1,7 @@
 package org.example.restaurant.domain.entities;
 
 
-import javax.swing.text.html.parser.Entity;
+import com.almasb.fxgl.entity.Entity;
 
 public class Mesa {
     private boolean ocupado;

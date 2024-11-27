@@ -1,35 +1,37 @@
 package org.example.restaurant;
 
+
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.dsl.FXGL;
-import javafx.scene.image.Image;
-import javafx.scene.paint.ImagePattern;
-import javafx.scene.shape.Rectangle;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.layout.AnchorPane;
 
-import java.awt.*;
+
+import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameScene;
+
 
 public class Main extends GameApplication {
 
     @Override
     protected void initSettings(GameSettings settings) {
         settings.setMainMenuEnabled(true);
-        settings.setWidth(1000);
-        settings.setHeight(600);
-        settings.setTitle("Restaurant-simulador");
+        settings.setWidth(1053);
+        settings.setHeight(560);
+        settings.setTitle("restaurant");
     }
 
 
     @Override
-    protected void initGame() {
+    protected void initGame(){
         try {
-            Image bgImage = FXGL.getAssetLoader().loadImage("Restaurante.png");
-            Rectangle bg = new Rectangle(1000, 600);
-            bg.setFill(new ImagePattern(bgImage));
-            FXGL.getGameScene().addUINode(bg);
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("hello.fxml"));
+            AnchorPane root = loader.load();
+            FXGL.getGameScene().addUINode(root);
         } catch (Exception e) {
-            throw new RuntimeException("Error al cargar la imagen de fondo: " + e.getMessage(), e);
+            throw new RuntimeException(e);
         }
+        getGameScene().setBackgroundRepeat("Restaurante.png");
 
 
     }

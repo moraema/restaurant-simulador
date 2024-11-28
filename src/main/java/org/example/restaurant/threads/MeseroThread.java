@@ -75,27 +75,17 @@ public class MeseroThread extends Thread {
             synchronized (comensal) {
                 comensal.setAtendido(true);
                 comensal.notify();
-                System.out.println("Mesero recogiendo la comida para el comensal: " + comensal.getId());
-
-                // Mostrar al mesero tomando la orden
-                Platform.runLater(() -> mostrarMeseroTemporalmente(comensal));
-
-                // Simular que el mesero tarda en recoger la comida
-                try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
                 System.out.println("Mesero entregó la comida al comensal: " + comensal.getId());
 
                 Platform.runLater(() -> {
-                    mostrarComidaDelComesal(comensal); // Mostrar la comida del comensal
-                    mostrarMeseroTemporalmente(comensal); // Mostrar al mesero entregando la comida
+                    mostrarComidaDelComesal(comensal);
+                    mostrarMeseroTemporalmente(comensal);
                 });
             }
         } else {
             System.out.println("No se encontró al comensal para la orden: " + orden.getId());
         }
+
+
     }
 }

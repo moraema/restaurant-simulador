@@ -29,26 +29,20 @@ public class Controllers implements Initializable {
     public static void initGame() {
         restaurantInitializer = new RestaurantInitializer();
         FXGL.getGameWorld().addEntityFactory(new Factory());
-
+        mostrarCocinero();
         FXGL.getGameTimer().runAtInterval(Controllers::spawnCliente, Duration.seconds(3));
 
     }
 
-/*
-    private static void spawnVisualEntities() {
-        List<MeseroThread> meseros = restaurantInitializer.getWaiters();
 
-        for (int i = 0; i < meseros.size(); i++) {
-            int[] position = MESA_POSICIONES.get(i);
+    private static void mostrarCocinero() {
+        SpawnData data = new SpawnData(650, 0);
+        Entity cocinero = FXGL.spawn("Cocinero", data);
+
+        FXGL.getGameWorld().addEntity(cocinero);
+    }
 
 
-            Entity meseroEntity = FXGL.spawn("Mesero", position[0] - 50, position[1]);
-
-            FXGL.getGameTimer().runOnceAfter(() -> {
-                FXGL.getGameWorld().removeEntity(meseroEntity);
-            }, Duration.millis(500));
-        }
-    }*/
 
     private static int clientIdCounter = 0;
 

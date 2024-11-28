@@ -60,7 +60,7 @@ public class MeseroThread extends Thread {
             FXGL.getGameWorld().removeEntity(meseroEntity);
         }, Duration.millis(500));
     }
-
+/*
     private int contadorOrdenes = 0; // control de las ordenes
     // Genera orden con ID
     private Orden nuevaOrden() {
@@ -68,7 +68,7 @@ public class MeseroThread extends Thread {
         contadorOrdenes++;
         return nuevaOrden;
     }
-
+*/
     private void entregarComidaAlCliente(Orden orden) {
         Comensal comensal = ComensalRegistry.getComensalById(orden.getId());
         if (comensal != null) {

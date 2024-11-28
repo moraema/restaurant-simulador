@@ -6,6 +6,8 @@ import com.almasb.fxgl.entity.SpawnData;
 import javafx.application.Platform;
 import org.example.restaurant.domain.entities.Comensal;
 import org.example.restaurant.domain.entities.Mesa;
+import org.example.restaurant.domain.entities.Mesero;
+import org.example.restaurant.threads.MeseroThread;
 
 
 import java.util.ArrayList;
@@ -18,14 +20,19 @@ public class Recepcionista {
     private final List<Mesa> mesas;
     private final Queue<Comensal> salaDeEspera = new LinkedList<>();
     private final List<Entity> salaDeEsperaVisual = new ArrayList<>();
-
+    private  final List<Mesero> meseros;
     private static final int SALA_ESPERA = 900;
     private static final int ESPACIOS = 10;
     private static final int INICIO_EN_Y = 400;
 
 
-    public Recepcionista(List<Mesa> mesas) {
+    public Recepcionista(List<Mesa> mesas, List<Mesero> meseros) {
         this.mesas = mesas;
+        if (meseros == null || meseros.isEmpty()) {
+            throw new IllegalArgumentException("La lista de meseros no puede ser nula o vacía");
+        }
+
+        this.meseros = meseros;
     }
 
 
@@ -37,6 +44,7 @@ public class Recepcionista {
                     System.out.println("Mesa ocupada por el comensal " + comensal.getId());
                     mesa.setClienteVisual(comensal.getEntidadVisual());
                     mesa.setComensal(comensal);
+                    notificarMeseroParaTomarOrden(comensal);
                     return mesa;
                 }
             }
@@ -122,5 +130,32 @@ public class Recepcionista {
         });
     }
 
+    private synchronized void notificarMeseroParaTomarOrden(Comensal comensal) throws InterruptedException {
+        while (true) {
+            for (Mesero mesero : meseros) {
+                if (!mesero.isOcupado()) {
+                    mesero.setOcupado(true); // Marcar al mesero como ocupado
+                    mesero.tomarOrden(comensal);
+                    System.out.println("Mesero " + mesero.getId() + " está tomando la orden del comensal " + comensal.getId());
+                    return;
+                }
+            }
+
+            System.out.println("No hay meseros disponibles, esperando...");
+            wait();
+        }
+    }
+
+    public synchronized void liberarMesero(int meseroId) {
+        for (Mesero mesero : meseros) {
+            if (mesero.getId() == meseroId) {
+                mesero.setOcupado(false);
+                System.out.println("Mesero " + meseroId + " ahora está disponible.");
+                notifyAll(); // Notifica que hay meseros disponibles
+                return;
+            }
+        }
+        System.err.println("Error: No se encontró el mesero con ID " + meseroId);
+    }
 
 }

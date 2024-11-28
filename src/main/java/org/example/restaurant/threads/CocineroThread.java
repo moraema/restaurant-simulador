@@ -34,7 +34,7 @@ public class CocineroThread extends Thread {
 
                 synchronized (bufferComidas) {
                     bufferComidas.agregar(orden);
-                    bufferComidas.notify(); // Notifica al mesero que la comida está lista
+                    bufferComidas.notifyAll(); // Notifica al mesero que la comida está lista
                     System.out.println("Cocinero terminó la comida para la orden: " + orden.getId());
                 }
             }

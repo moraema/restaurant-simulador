@@ -4,6 +4,7 @@ import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.SpawnData;
 import javafx.application.Platform;
+import javafx.util.Duration;
 import org.example.restaurant.domain.entities.Comensal;
 import org.example.restaurant.domain.entities.Mesa;
 import org.example.restaurant.domain.entities.Mesero;
@@ -136,14 +137,27 @@ public class Recepcionista {
                 if (!mesero.isOcupado()) {
                     mesero.setOcupado(true); // Marcar al mesero como ocupado
                     mesero.tomarOrden(comensal);
+                    Platform.runLater(() -> mostrarMeseroTemporalmente(comensal));
                     System.out.println("Mesero " + mesero.getId() + " está tomando la orden del comensal " + comensal.getId());
                     return;
                 }
             }
 
+
             System.out.println("No hay meseros disponibles, esperando...");
             wait();
         }
+    }
+
+    public void mostrarMeseroTemporalmente(Comensal comensal) {
+        SpawnData spawnData = new SpawnData(comensal.getEntidadVisual().getPosition());
+        Entity meseroEntity = FXGL.spawn("Mesero", spawnData);
+
+        FXGL.getGameWorld().addEntity(meseroEntity);
+
+        FXGL.getGameTimer().runOnceAfter(() -> {
+            FXGL.getGameWorld().removeEntity(meseroEntity);
+        }, Duration.millis(400));
     }
 
     public synchronized void liberarMesero(int meseroId) {

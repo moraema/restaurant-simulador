@@ -34,7 +34,7 @@ public class ComensalThread extends Thread {
             }
 
             System.out.println("El comensal " + comensal.getId() + " a empezado a comer");
-           Thread.sleep((long) (Math.random() * 5000 + 3000));
+            Thread.sleep((long) (Math.random() * 5000 + 3000));
             System.out.println("el comensal " + comensal.getId() + " a termiando de comer");
             recepcionista.liberarMesa(mesa);
             System.out.println("Comensal " + comensal.getId() + " ha salido del restaurante");

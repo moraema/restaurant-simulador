@@ -18,7 +18,7 @@ public class Main extends GameApplication {
         settings.setMainMenuEnabled(true);
         settings.setWidth(1053);
         settings.setHeight(560);
-        settings.setTitle("restaurant");
+        settings.setTitle("Restaurant Sayayin");
     }
 
 

@@ -34,7 +34,7 @@ public class Controllers implements Initializable {
 
     }
 
-
+/*
     private static void spawnVisualEntities() {
         List<MeseroThread> meseros = restaurantInitializer.getWaiters();
 
@@ -48,7 +48,7 @@ public class Controllers implements Initializable {
                 FXGL.getGameWorld().removeEntity(meseroEntity);
             }, Duration.millis(500));
         }
-    }
+    }*/
 
     private static int clientIdCounter = 0;
 

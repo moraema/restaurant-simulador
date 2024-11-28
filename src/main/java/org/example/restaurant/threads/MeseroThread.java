@@ -11,48 +11,34 @@ import org.example.restaurant.domain.entities.Orden;
 import org.example.restaurant.domain.logic.BufferComidas;
 import org.example.restaurant.domain.logic.ComensalRegistry;
 import org.example.restaurant.domain.logic.Buffer;
+import org.example.restaurant.domain.logic.Recepcionista;
 
 import java.util.List;
 
 public class MeseroThread extends Thread {
-    private final BufferComidas<Orden> bufferComidas;
-    private final Buffer<Orden> bufferOrdenes; // Buffer para las órdenes que el mesero pasará al cocinero
+    private final BufferComidas<Orden> bufferComidas;// Buffer para las órdenes que el mesero pasará al cocinero
+    private final int meseroId;
+    private final Recepcionista recepcionista;
 
-    public MeseroThread(BufferComidas<Orden> bufferComidas, Buffer<Orden> bufferOrdenes) {
+    public MeseroThread(BufferComidas<Orden> bufferComidas, Recepcionista recepcionista, int meseroId) {
         this.bufferComidas = bufferComidas;
-        this.bufferOrdenes = bufferOrdenes;
+        this.meseroId = meseroId;
+        this.recepcionista = recepcionista;
     }
 
     @Override
     public void run() {
-       try {
+        try {
+            while (true) {
+                Orden comidaLista = bufferComidas.retirar(); // Retira una comida del buffer
+                System.out.println("Mesero retiró la comida de la orden: " + comidaLista.getId());
+                entregarComidaAlCliente(comidaLista);
+                recepcionista.liberarMesero(meseroId);
 
-          synchronized (bufferOrdenes) {
-              while (bufferOrdenes.isEmpty()) {
-                  System.out.println("El mesero esta descansando");
-                  bufferOrdenes.wait();
-              }
-         //     bufferOrdenes.retirar();
-          //    System.out.println("El mesero toma la orden para entregrselo al cocinero");
-          }
-
-          synchronized (bufferOrdenes) {
-              Orden nuevaorden = nuevaOrden();
-              bufferOrdenes.agregar(nuevaorden);
-              System.out.println("El mesero agrego una nueva orden " + nuevaOrden().getId());
-              bufferOrdenes.notifyAll();
-          }
-
-          synchronized (bufferComidas) {
-              while (bufferComidas.isEmpty()) {
-                  Orden ordenLista = bufferComidas.retirar();
-                  System.out.println("El mesero retirado la comida " + ordenLista.getId());
-                  entregarComidaAlCliente(ordenLista);
-              }
-          }
-       } catch (InterruptedException e) {
-           e.printStackTrace();
-       }
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     public  void mostrarComidaDelComesal(Comensal comensal) {
@@ -99,6 +85,8 @@ public class MeseroThread extends Thread {
         } else {
             System.out.println("No se encontró al comensal para la orden: " + orden.getId());
         }
+
+
     }
 
 }
